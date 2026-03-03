@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SS1 BIKE RENTALS - OFFICIAL</title>
+    <style>
+        :root { --gold: #FFD700; --green: #25D366; --red: #ff3333; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Arial', sans-serif; scroll-behavior: smooth; }
+        
+        /* Navigation Tabs */
+        .nav-tabs { background: #1a1a1a; display: flex; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--gold); overflow-x: auto; }
+        .tab { color: white; padding: 15px; text-decoration: none; font-weight: bold; border: none; background: none; cursor: pointer; flex: 1; min-width: 100px; text-transform: uppercase; font-size: 11px; }
+        .tab.active { background: var(--gold); color: black; }
+
+        /* Pillar 1: Hero Section (Ghat Road/Rider/Swamy) */
+        .hero { 
+            height: 100vh; 
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('assets/images/21428.jpg') no-repeat center center;
+            background-size: cover;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
+        }
+
+        .pillar-page { display: none; padding: 20px; min-height: 80vh; background: #f4f4f4; padding-bottom: 60px; }
+        .active-page { display: block; }
+
+        /* General Styling */
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); max-width: 600px; margin: 20px auto; }
+        .warning-red { color: white; background: var(--red); font-weight: bold; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 20px; border: 2px solid #900; }
+        input, select, textarea, button { width: 100%; padding: 14px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; box-sizing: border-box; }
+        
+        .btn-action { background: var(--green); color: white; border: none; font-weight: bold; cursor: pointer; }
+        .next-btn { background: #333; color: var(--gold); border: 2px solid var(--gold); margin-top: 30px; font-weight: bold; cursor: pointer; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Pillar 4 Gallery */
+        #photoGallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 20px; }
+        .gallery-item { height: 140px; background-size: cover; background-position: center; border-radius: 8px; border: 1px solid #ddd; }
+
+        /* Pillar 9 Signature */
+        .footer { background: #111; color: white; text-align: center; padding: 40px 20px; border-top: 3px solid var(--gold); }
+        .rainbow-link { 
+            font-size: 26px; font-weight: bold; 
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            cursor: pointer; display: inline-block;
+        }
+
+        /* Profile Modal */
+        #profileModal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
+        .modal-content { background: white; margin: 15% auto; padding: 20px; border-radius: 15px; width: 85%; max-width: 350px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-tabs" id="mainNav">
+        <button class="tab active" onclick="showPillar('home', 0)">Home</button>
+        <button class="tab" onclick="showPillar('about', 1)">About/Map</button>
+        <button class="tab" onclick="showPillar('gallery', 2)">Gallery</button>
+        <button class="tab" onclick="showPillar('booking', 3)">Booking</button>
+        <button class="tab" onclick="showPillar('terms', 4)">Terms</button>
+        <button class="tab" onclick="showPillar('reviews', 5)">Reviews</button>
+        <button class="tab" onclick="showPillar('admin', 6)">Admin</button>
+    </nav>
+
+    <div id="home" class="pillar-page active-page" style="padding:0; background:none;">
+        <div class="hero">
+            <h1 style="font-size: 3.2rem; margin:0;">SS1 BIKE RENTALS</h1>
+            <div style="color:var(--gold); font-size:1.4rem; font-weight:bold; margin:15px 0;">🙏 Lord Venkateswara Swamy Blessings 🙏</div>
+            <p style="font-size:1.1rem; max-width:85%;">Reliable Bike Rentals in Tirupati for your Divine Journey</p>
+            <div style="background:rgba(0,0,0,0.6); padding:10px 20px; border-radius:50px; margin-top:15px; font-size: 0.9rem;">
+                Weather: 32°C | Crowd Waiting: 18-20 hrs
+            </div>
+            <button class="next-btn" style="width: 200px; padding: 15px;" onclick="showPillar('about', 1)">START JOURNEY →</button>
+        </div>
+    </div>
+
+    <div id="about" class="pillar-page">
+        <div class="card">
+            <h3>3 Simple Steps to Reach Us</h3>
+            <p>1. Exit Tirupati Bus Stand Main Gate.</p>
+            <p>2. Walk toward Sandhya Theatre Complex.</p>
+            <p>3. Find <b>Shop No. 8</b> (SS1 BIKE RENTALS).</p>
+            <hr>
+            <p><b>Address:</b> Shop no 8, Sandhya Theatre Complex, near bus stand, Tirupati 517501.</p>
+            <button class="next-btn" onclick="showPillar('gallery', 2)">CONTINUE TO GALLERY →</button>
+        </div>
+    </div>
+
+    <div id="gallery" class="pillar-page">
+        <div class="card">
+            <h3>Pilgrimage Memories</h3>
+            <p>Upload your journey photos here:</p>
+            <input type="file" id="photoInput" accept="image/*">
+            <button class="btn-action" onclick="handleUpload()" style="background:#333;">UPLOAD TO WALL</button>
+            <div id="photoGallery"></div>
+            <button class="next-btn" onclick="showPillar('booking', 3)">GO TO BOOKING →</button>
+        </div>
+    </div>
+
+    <div id="booking" class="pillar-page">
+        <div class="card">
+            <div id="festBanner" style="background:var(--gold); display:none; padding:15px; text-align:center; font-weight:bold; margin-bottom:15px; border-radius:8px; border:2px dashed black;"></div>
+            <div class="warning-red">⚠️ ORIGINAL DL AND AADHAR CARD ARE MANDATORY</div>
+            
+            <label>Select Your Vehicle:</label>
+            <select id="bikeType">
+                <option value="Scooter - ₹500">Suzuki Access - ₹500/24h</option>
+                <option value="Scooter - ₹500">Yamaha Fascino - ₹500/24h</option>
+                <option value="Scooter - ₹500">Honda Activa - ₹500/24h</option>
+                <option value="Scooter - ₹500">TVS Jupiter - ₹500/24h</option>
+                <option value="Bike - ₹700">Honda Shine - ₹700/24h</option>
+                <option value="Bike - ₹700">Bajaj Pulsar - ₹700/24h</option>
+            </select>
+            
+            <label>Pickup Date:</label>
+            <input type="date" id="bookDate">
+            <input type="text" id="custName" placeholder="Enter Full Name">
+            <button class="btn-action" onclick="sendWA()">BOOK VIA WHATSAPP</button>
+            <button class="next-btn" onclick="showPillar('terms', 4)">VIEW TERMS →</button>
+        </div>
+    </div>
+
+    <div id="terms" class="pillar-page">
+        <div class="card">
+            <h3>Terms & Conditions</h3>
+            <ol style="line-height: 1.7;">
+                <li>Refundable deposit of ₹1,000 required.</li>
+                <li>Submit Original physical DL & Aadhar Card.</li>
+                <li>Age 18+ only with valid driving licence.</li>
+                <li>Don't drunk and drive.</li>
+                <li>Helmet is compulsory at all times.</li>
+                <li>Helmet damage/loss fine: ₹500.</li>
+                <li>Customer is 100% responsible for vehicle damage.</li>
+                <li>Minimum fuel provided; customer refuels as needed.</li>
+                <li>Late return fee: ₹50 per hour.</li>
+                <li><b>Rider is only responsible to pay all traffic challans.</b></li>
+            </ol>
+            <button class="next-btn" onclick="showPillar('reviews', 5)">CUSTOMER REVIEWS →</button>
+        </div>
+    </div>
+
+    <div id="reviews" class="pillar-page">
+        <div class="card">
+            <h3>Your Experience</h3>
+            <div id="reviewList" style="margin-bottom:15px; max-height: 200px; overflow-y: auto;"></div>
+            <input type="text" id="revName" placeholder="Your Name">
+            <textarea id="revText" placeholder="Share your divine journey experience..."></textarea>
+            <button class="btn-action" style="background:#444;" onclick="addReview()">POST REVIEW</button>
+            <button class="next-btn" onclick="showPillar('admin', 6)">ADMIN ACCESS →</button>
+        </div>
+    </div>
+
+    <div id="admin" class="pillar-page">
+        <div class="card" style="text-align:center;">
+            <h3>Admin Dashboard</h3>
+            <p>Set Custom Offer Text:</p>
+            <input type="text" id="offerInput" placeholder="e.g. 10% Off for Brahmotsavam!">
+            <button onclick="updateOffer()" class="btn-action">SAVE OFFER TEXT</button>
+            <button onclick="toggleOffer()" id="toggleBtn" style="background:#222; color:white;">SHOW/HIDE OFFER BANNER</button>
+            <button class="next-btn" onclick="showPillar('home', 0)">BACK TO HOME ↑</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="rainbow-link" onclick="openProfile()">DVM Chowdary</div>
+    </footer>
+
+    <div id="profileModal">
+        <div class="modal-content">
+            <img src="assets/images/dev_pic.jpg" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--gold);" onerror="this.src='https://via.placeholder.com/100/333/fff?text=DVM'">
+            <h2 style="margin:10px 0 5px;">Dondapati Manikanta</h2>
+            <p style="color:gray; margin-bottom:15px;">Senior Consultant</p>
+            <p><b>Contact:</b> 8333033390</p>
+            <p><b>Email:</b> <a href="mailto:dondapatimanikanta612@gmail.com" style="color:blue;">dondapatimanikanta612@gmail.com</a></p>
+            <button onclick="closeProfile()" style="background:#333; color:white; width:auto; padding:8px 25px; margin-top:15px;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Navigation Logic
+        function showPillar(id, tabIndex) {
+            var pages = document.getElementsByClassName("pillar-page");
+            for (var i = 0; i < pages.length; i++) pages[i].classList.remove("active-page");
+            
+            var tabs = document.getElementsByClassName("tab");
+            for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove("active");
+            
+            document.getElementById(id).classList.add("active-page");
+            tabs[tabIndex].classList.add("active");
+            window.scrollTo(0, 0);
+        }
+
+        // Photo Upload Logic (Pillar 4)
+        function handleUpload() {
+            const file = document.getElementById('photoInput').files[0];
+            if(!file) return alert("Please select a photo first!");
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.className = 'gallery-item';
+                div.style.backgroundImage = `url(${e.target.result})`;
+                document.getElementById('photoGallery').prepend(div);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Admin Custom Offer Logic (Pillar 7)
+        function updateOffer() {
+            const text = document.getElementById('offerInput').value;
+            if(!text) return alert("Enter some text!");
+            document.getElementById('festBanner').innerText = "🎉 " + text + " 🎉";
+            alert("Offer text updated!");
+        }
+
+        function toggleOffer() {
+            const banner = document.getElementById('festBanner');
+            banner.style.display = (banner.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // WhatsApp Booking Logic (Pillar 5)
+        function sendWA() {
+            const bike = document.getElementById('bikeType').value;
+            const date = document.getElementById('bookDate').value;
+            const name = document.getElementById('custName').value;
+            if(!date || !name) return alert("Please fill Name and Date!");
+            const msg = encodeURIComponent(`Booking Request: ${bike}\nDate: ${date}\nName: ${name}`);
+            window.open(`https://wa.me/917799699920?text=${msg}`);
+        }
+
+        // Review Logic (Pillar 8)
+        function addReview() {
+            const name = document.getElementById('revName').value;
+            const text = document.getElementById('revText').value;
+            if(name && text) {
+                document.getElementById('reviewList').innerHTML += `<p style="border-bottom:1px solid #ddd; padding:5px;"><b>${name}:</b> ${text}</p>`;
+                document.getElementById('revName').value = ""; document.getElementById('revText').value = "";
+            }
+        }
+
+        // Profile Logic (Pillar 9)
+        function openProfile() { document.getElementById("profileModal").style.display = "block"; }
+        function closeProfile() { document.getElementById("profileModal").style.display = "none"; }
+    </script>
+</body>
+</html>
