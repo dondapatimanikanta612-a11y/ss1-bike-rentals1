@@ -1,246 +1,514 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS1 BIKE RENTALS - OFFICIAL</title>
-    <style>
-        :root { --gold: #FFD700; --green: #25D366; --red: #ff3333; }
-        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Arial', sans-serif; scroll-behavior: smooth; }
-        
-        /* Navigation Tabs */
-        .nav-tabs { background: #1a1a1a; display: flex; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--gold); overflow-x: auto; }
-        .tab { color: white; padding: 15px; text-decoration: none; font-weight: bold; border: none; background: none; cursor: pointer; flex: 1; min-width: 100px; text-transform: uppercase; font-size: 11px; }
-        .tab.active { background: var(--gold); color: black; }
 
-        /* Pillar 1: Hero Section (Ghat Road/Rider/Swamy) */
-        .hero { 
-            height: 100vh; 
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('21428.jpg') no-repeat center center;
-            background-size: cover;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
-        }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .pillar-page { display: none; padding: 20px; min-height: 80vh; background: #f4f4f4; padding-bottom: 60px; }
-        .active-page { display: block; }
+<title>SS1 Bike Rentals</title>
 
-        /* General Styling */
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); max-width: 600px; margin: 20px auto; }
-        .warning-red { color: white; background: var(--red); font-weight: bold; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 20px; border: 2px solid #900; }
-        input, select, textarea, button { width: 100%; padding: 14px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; box-sizing: border-box; }
-        
-        .btn-action { background: var(--green); color: white; border: none; font-weight: bold; cursor: pointer; }
-        .next-btn { background: #333; color: var(--gold); border: 2px solid var(--gold); margin-top: 30px; font-weight: bold; cursor: pointer; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-        /* Pillar 4 Gallery */
-        #photoGallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 20px; }
-        .gallery-item { height: 140px; background-size: cover; background-position: center; border-radius: 8px; border: 1px solid #ddd; }
+<style>
 
-        /* Pillar 9 Signature */
-        .footer { background: #111; color: white; text-align: center; padding: 40px 20px; border-top: 3px solid var(--gold); }
-        .rainbow-link { 
-            font-size: 26px; font-weight: bold; 
-            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            cursor: pointer; display: inline-block;
-        }
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),url("21428.jpg") center/cover fixed;
+color:white;
+}
 
-        /* Profile Modal */
-        #profileModal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
-        .modal-content { background: white; margin: 15% auto; padding: 20px; border-radius: 15px; width: 85%; max-width: 350px; text-align: center; }
-    </style>
+.page{display:none;padding:20px}
+.active{display:block}
+
+.navBtn{
+padding:10px 20px;
+margin:5px;
+background:#FFD700;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+table{
+width:100%;
+background:white;
+color:black;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid #ccc;
+padding:6px;
+}
+
+#dvmBrand{
+position:fixed;
+bottom:15px;
+left:50%;
+transform:translateX(-50%);
+font-size:26px;
+font-weight:bold;
+background:linear-gradient(90deg,red,orange,yellow,green,blue,indigo,violet);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+cursor:pointer;
+}
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.85);
+}
+
+.modalBox{
+background:white;
+color:black;
+width:90%;
+max-width:420px;
+margin:100px auto;
+padding:20px;
+border-radius:10px;
+text-align:center;
+}
+
+.alert{
+background:red;
+padding:10px;
+}
+
+</style>
 </head>
+
 <body>
 
-    <nav class="nav-tabs" id="mainNav">
-        <button class="tab active" onclick="showPillar('home', 0)">Home</button>
-        <button class="tab" onclick="showPillar('about', 1)">About/Map</button>
-        <button class="tab" onclick="showPillar('gallery', 2)">Gallery</button>
-        <button class="tab" onclick="showPillar('booking', 3)">Booking</button>
-        <button class="tab" onclick="showPillar('terms', 4)">Terms</button>
-        <button class="tab" onclick="showPillar('reviews', 5)">Reviews</button>
-        <button class="tab" onclick="showPillar('admin', 6)">Admin</button>
-    </nav>
+<!-- HOME -->
 
-    <div id="home" class="pillar-page active-page" style="padding:0; background:none;">
-        <div class="hero">
-            <h1 style="font-size: 3.2rem; margin:0;">SS1 BIKE RENTALS</h1>
-            <div style="color:var(--gold); font-size:1.4rem; font-weight:bold; margin:15px 0;">🙏 Lord Venkateswara Swamy Blessings 🙏</div>
-            <p style="font-size:1.1rem; max-width:85%;">Reliable Bike Rentals in Tirupati for your Divine Journey</p>
-            <div style="background:rgba(0,0,0,0.6); padding:10px 20px; border-radius:50px; margin-top:15px; font-size: 0.9rem;">
-                Weather: 32°C | Crowd Waiting: 18-20 hrs
-            </div>
-            <button class="next-btn" style="width: 200px; padding: 15px;" onclick="showPillar('about', 1)">START JOURNEY →</button>
-        </div>
-    </div>
+<div id="homePage" class="page active">
 
-    <div id="about" class="pillar-page">
-        <div class="card">
-            <h3>3 Simple Steps to Reach Us</h3>
-            <p>1. Exit Tirupati Bus Stand Main Gate.</p>
-            <p>2. Walk toward Sandhya Theatre Complex.</p>
-            <p>3. Find <b>Shop No. 8</b> (SS1 BIKE RENTALS).</p>
-            <hr>
-            <p><b>Address:</b> Shop no 8, Sandhya Theatre Complex, near bus stand, Tirupati 517501.</p>
-            <button class="next-btn" onclick="showPillar('gallery', 2)">CONTINUE TO GALLERY →</button>
-        </div>
-    </div>
+<div style="height:100vh;display:flex;justify-content:center;align-items:center;flex-direction:column">
 
-    <div id="gallery" class="pillar-page">
-        <div class="card">
-            <h3>Pilgrimage Memories</h3>
-            <p>Upload your journey photos here:</p>
-            <input type="file" id="photoInput" accept="image/*">
-            <button class="btn-action" onclick="handleUpload()" style="background:#333;">UPLOAD TO WALL</button>
-            <div id="photoGallery"></div>
-            <button class="next-btn" onclick="showPillar('booking', 3)">GO TO BOOKING →</button>
-        </div>
-    </div>
+<h1>SS1 BIKE RENTALS</h1>
 
-    <div id="booking" class="pillar-page">
-        <div class="card">
-            <div id="festBanner" style="background:var(--gold); display:none; padding:15px; text-align:center; font-weight:bold; margin-bottom:15px; border-radius:8px; border:2px dashed black;"></div>
-            <div class="warning-red">⚠️ ORIGINAL DL AND AADHAR CARD ARE MANDATORY</div>
-            
-            <label>Select Your Vehicle:</label>
-            <select id="bikeType">
-                <option value="Scooter - ₹500">Suzuki Access - ₹500/24h</option>
-                <option value="Scooter - ₹500">Yamaha Fascino - ₹500/24h</option>
-                <option value="Scooter - ₹500">Honda Activa - ₹500/24h</option>
-                <option value="Scooter - ₹500">TVS Jupiter - ₹500/24h</option>
-                <option value="Bike - ₹700">Honda Shine - ₹700/24h</option>
-                <option value="Bike - ₹700">Bajaj Pulsar - ₹700/24h</option>
-            </select>
-            
-            <label>Pickup Date:</label>
-            <input type="date" id="bookDate">
-            <input type="text" id="custName" placeholder="Enter Full Name">
-            <button class="btn-action" onclick="sendWA()">BOOK VIA WHATSAPP</button>
-            <button class="next-btn" onclick="showPillar('terms', 4)">VIEW TERMS →</button>
-        </div>
-    </div>
+<button onclick="showPage('dashboardPage')" class="navBtn">
+ENTER WEBSITE
+</button>
 
-    <div id="terms" class="pillar-page">
-        <div class="card">
-            <h3>Terms & Conditions</h3>
-            <ol style="line-height: 1.7;">
-                <li>Refundable deposit of ₹1,000 required.</li>
-                <li>Submit Original physical DL & Aadhar Card.</li>
-                <li>Age 18+ only with valid driving licence.</li>
-                <li>Don't drunk and drive.</li>
-                <li>Helmet is compulsory at all times.</li>
-                <li>Helmet damage/loss fine: ₹500.</li>
-                <li>Customer is 100% responsible for vehicle damage.</li>
-                <li>Minimum fuel provided; customer refuels as needed.</li>
-                <li>Late return fee: ₹50 per hour.</li>
-                <li><b>Rider is only responsible to pay all traffic challans.</b></li>
-            </ol>
-            <button class="next-btn" onclick="showPillar('reviews', 5)">CUSTOMER REVIEWS →</button>
-        </div>
-    </div>
+</div>
 
-    <div id="reviews" class="pillar-page">
-        <div class="card">
-            <h3>Your Experience</h3>
-            <div id="reviewList" style="margin-bottom:15px; max-height: 200px; overflow-y: auto;"></div>
-            <input type="text" id="revName" placeholder="Your Name">
-            <textarea id="revText" placeholder="Share your divine journey experience..."></textarea>
-            <button class="btn-action" style="background:#444;" onclick="addReview()">POST REVIEW</button>
-            <button class="next-btn" onclick="showPillar('admin', 6)">ADMIN ACCESS →</button>
-        </div>
-    </div>
+</div>
 
-    <div id="admin" class="pillar-page">
-        <div class="card" style="text-align:center;">
-            <h3>Admin Dashboard</h3>
-            <p>Set Custom Offer Text:</p>
-            <input type="text" id="offerInput" placeholder="e.g. 10% Off for Brahmotsavam!">
-            <button onclick="updateOffer()" class="btn-action">SAVE OFFER TEXT</button>
-            <button onclick="toggleOffer()" id="toggleBtn" style="background:#222; color:white;">SHOW/HIDE OFFER BANNER</button>
-            <button class="next-btn" onclick="showPillar('home', 0)">BACK TO HOME ↑</button>
-        </div>
-    </div>
+<!-- DASHBOARD -->
 
-    <footer class="footer">
-        <div class="rainbow-link" onclick="openProfile()">DVM Chowdary</div>
-    </footer>
+<div id="dashboardPage" class="page">
 
-    <div id="profileModal">
-        <div class="modal-content">
-            <img src="assets/images/dev_pic.jpg" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--gold);" onerror="this.src='https://via.placeholder.com/100/333/fff?text=DVM'">
-            <h2 style="margin:10px 0 5px;">Dondapati Manikanta</h2>
-            <p style="color:gray; margin-bottom:15px;">Senior Consultant</p>
-            <p><b>Contact:</b> 8333033390</p>
-            <p><b>Email:</b> <a href="mailto:dondapatimanikanta612@gmail.com" style="color:blue;">dondapatimanikanta612@gmail.com</a></p>
-            <button onclick="closeProfile()" style="background:#333; color:white; width:auto; padding:8px 25px; margin-top:15px;">Close</button>
-        </div>
-    </div>
+<h2>Bike Dashboard</h2>
 
-    <script>
-        // Navigation Logic
-        function showPillar(id, tabIndex) {
-            var pages = document.getElementsByClassName("pillar-page");
-            for (var i = 0; i < pages.length; i++) pages[i].classList.remove("active-page");
-            
-            var tabs = document.getElementsByClassName("tab");
-            for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove("active");
-            
-            document.getElementById(id).classList.add("active-page");
-            tabs[tabIndex].classList.add("active");
-            window.scrollTo(0, 0);
-        }
+<input id="searchRC" placeholder="Search RC" onkeyup="searchBike()">
 
-        // Photo Upload Logic (Pillar 4)
-        function handleUpload() {
-            const file = document.getElementById('photoInput').files[0];
-            if(!file) return alert("Please select a photo first!");
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const div = document.createElement('div');
-                div.className = 'gallery-item';
-                div.style.backgroundImage = `url(${e.target.result})`;
-                document.getElementById('photoGallery').prepend(div);
-            };
-            reader.readAsDataURL(file);
-        }
+<table id="bikeTable"></table>
 
-        // Admin Custom Offer Logic (Pillar 7)
-        function updateOffer() {
-            const text = document.getElementById('offerInput').value;
-            if(!text) return alert("Enter some text!");
-            document.getElementById('festBanner').innerText = "🎉 " + text + " 🎉";
-            alert("Offer text updated!");
-        }
+<button onclick="showPage('bookingPage')" class="navBtn">
+Booking →
+</button>
 
-        function toggleOffer() {
-            const banner = document.getElementById('festBanner');
-            banner.style.display = (banner.style.display === 'block') ? 'none' : 'block';
-        }
+</div>
 
-        // WhatsApp Booking Logic (Pillar 5)
-        function sendWA() {
-            const bike = document.getElementById('bikeType').value;
-            const date = document.getElementById('bookDate').value;
-            const name = document.getElementById('custName').value;
-            if(!date || !name) return alert("Please fill Name and Date!");
-            const msg = encodeURIComponent(`Booking Request: ${bike}\nDate: ${date}\nName: ${name}`);
-            window.open(`https://wa.me/917799699920?text=${msg}`);
-        }
+<!-- BOOKING -->
 
-        // Review Logic (Pillar 8)
-        function addReview() {
-            const name = document.getElementById('revName').value;
-            const text = document.getElementById('revText').value;
-            if(name && text) {
-                document.getElementById('reviewList').innerHTML += `<p style="border-bottom:1px solid #ddd; padding:5px;"><b>${name}:</b> ${text}</p>`;
-                document.getElementById('revName').value = ""; document.getElementById('revText').value = "";
-            }
-        }
+<div id="bookingPage" class="page">
 
-        // Profile Logic (Pillar 9)
-        function openProfile() { document.getElementById("profileModal").style.display = "block"; }
-        function closeProfile() { document.getElementById("profileModal").style.display = "none"; }
-    </script>
+<h2>Booking</h2>
+
+<input id="bkName" placeholder="Customer Name">
+
+<input id="bkPhone" placeholder="Phone" onkeyup="checkHistory()">
+
+<input id="bkAadhaar" placeholder="Aadhaar" onkeyup="checkBlacklist()">
+
+<input id="bkDL" placeholder="Driving Licence Number">
+
+<select id="bkBike">
+
+<option>Suzuki Access</option>
+<option>Honda Activa</option>
+<option>Yamaha Fascino</option>
+<option>TVS Jupiter</option>
+<option>Bajaj Pulsar</option>
+<option>Honda Shine</option>
+
+</select>
+
+<button onclick="addBooking()" class="navBtn">Book</button>
+
+<div id="historyBox"></div>
+
+<div id="blacklistAlert"></div>
+
+<table id="bookingTable">
+
+<tr>
+<th>Name</th>
+<th>Phone</th>
+<th>Aadhaar</th>
+<th>DL</th>
+<th>Bike</th>
+<th>Rent</th>
+<th>Start</th>
+<th>End</th>
+<th>Total</th>
+<th>Invoice</th>
+</tr>
+
+</table>
+
+<button onclick="showPage('dashboardPage')" class="navBtn">← Dashboard</button>
+
+</div>
+
+<!-- PROFILE -->
+
+<div id="profileModal" class="modal">
+
+<div class="modalBox">
+
+<h2>DVM Chowdary</h2>
+
+<img src="7506.jpg" width="120" style="border-radius:50%">
+
+<p>Name : D. Manikanta</p>
+
+<p>Website Developer & Tester</p>
+
+<p>📞 8333033390<br>📞 8333996066</p>
+
+<p>📧 dondapatimanikanta@yahoo.com</p>
+
+<p>Live Young Live Free</p>
+
+<button onclick="closeProfile()">Close</button>
+
+</div>
+
+</div>
+
+<div id="dvmBrand" onclick="openProfile()">
+DVM Chowdary
+</div>
+
+<audio id="alarm">
+<source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg">
+</audio>
+
+<script>
+
+/* navigation */
+
+function showPage(p){
+document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"))
+document.getElementById(p).classList.add("active")
+}
+
+/* invoice serial */
+
+let invoiceCounter=localStorage.getItem("invoiceCounter")
+if(!invoiceCounter){invoiceCounter=1}else{invoiceCounter=parseInt(invoiceCounter)}
+
+/* bike models */
+
+const models=[
+{name:"Suzuki Access",price:500},
+{name:"Honda Activa",price:500},
+{name:"Yamaha Fascino",price:500},
+{name:"TVS Jupiter",price:500},
+{name:"Bajaj Pulsar",price:700},
+{name:"Honda Shine",price:700}
+]
+
+let bikes=[]
+let history=[]
+let blacklist=[]
+
+for(let i=1;i<=50;i++){
+let m=models[(i-1)%models.length]
+bikes.push({
+id:i,
+name:m.name,
+price:m.price,
+rc:"AP39SS"+(1000+i),
+status:"Available"
+})
+}
+
+/* dashboard */
+
+function loadDashboard(){
+
+let table=bikeTable
+
+table.innerHTML=
+
+`<tr>
+<th>ID</th>
+<th>Model</th>
+<th>RC</th>
+<th>Price</th>
+<th>Status</th>
+<th>Timer</th>
+<th>Action</th>
+</tr>`
+
+bikes.forEach(b=>{
+
+let timer=""
+
+if(b.status==="OUT" && b.start){
+
+let diff=(new Date()-b.start)/1000
+let remain=86400-diff
+
+if(remain>0){
+let h=Math.floor(remain/3600)
+let m=Math.floor((remain%3600)/60)
+timer=h+"h "+m+"m"
+}else{
+timer="OVERDUE"
+document.getElementById("alarm").play()
+}
+
+}
+
+table.innerHTML+=`
+
+<tr>
+
+<td>${b.id}</td>
+
+<td>${b.name}</td>
+
+<td>
+<input value="${b.rc}" id="rc${b.id}" style="width:100px">
+<button onclick="saveRC(${b.id})">Save</button>
+</td>
+
+<td>₹${b.price}</td>
+
+<td>${b.status}</td>
+
+<td>${timer}</td>
+
+<td>
+<button onclick="bikeOut(${b.id})">OUT</button>
+<button onclick="bikeIn(${b.id})">IN</button>
+</td>
+
+</tr>
+
+`
+
+})
+
+}
+
+loadDashboard()
+setInterval(loadDashboard,1000)
+
+/* rc edit */
+
+function saveRC(id){
+let bike=bikes.find(b=>b.id===id)
+bike.rc=document.getElementById("rc"+id).value
+}
+
+/* search */
+
+function searchBike(){
+let v=searchRC.value.toLowerCase()
+document.querySelectorAll("#bikeTable tr").forEach(r=>{
+if(!r.innerText.toLowerCase().includes(v)) r.style.display="none"
+})
+}
+
+/* bike out */
+
+function bikeOut(id){
+let bike=bikes.find(b=>b.id===id)
+bike.start=new Date()
+bike.status="OUT"
+}
+
+/* bike in */
+
+function bikeIn(id){
+let bike=bikes.find(b=>b.id===id)
+bike.status="Available"
+}
+
+/* booking */
+
+function addBooking(){
+
+let name=bkName.value
+let phone=bkPhone.value
+let aadhaar=bkAadhaar.value
+let dl=bkDL.value
+let bike=bkBike.value
+
+let price=(bike==="Bajaj Pulsar"||bike==="Honda Shine")?700:500
+
+let start=new Date()
+
+history.push({phone,bike,date:start})
+
+let r=bookingTable.insertRow()
+
+r.insertCell(0).innerText=name
+r.insertCell(1).innerText=phone
+r.insertCell(2).innerText=aadhaar
+r.insertCell(3).innerText=dl
+r.insertCell(4).innerText=bike
+r.insertCell(5).innerText="₹"+price
+r.insertCell(6).innerText=start.toLocaleString()
+
+r.insertCell(7).innerHTML=
+`<button onclick="endRide(this,'${name}','${phone}','${aadhaar}','${dl}','${bike}',${price})">END</button>`
+
+r.insertCell(8).innerText=""
+r.insertCell(9).innerText=""
+
+}
+
+/* end ride */
+
+function endRide(btn,name,phone,aadhaar,dl,bike,price){
+
+let row=btn.parentNode.parentNode
+
+let start=new Date(row.cells[6].innerText)
+let end=new Date()
+
+row.cells[7].innerText=end.toLocaleString()
+
+let hrs=(end-start)/1000/60/60
+let used=Math.ceil(hrs)
+let late=Math.max(0,used-24)
+let charge=late*50
+let total=price+charge
+
+row.cells[8].innerText="₹"+total
+
+row.cells[9].innerHTML=
+`<button onclick="generateInvoice('${name}','${phone}','${aadhaar}','${dl}','${bike}',${price},${late},${charge},${total})">
+Invoice
+</button>`
+
+}
+
+/* invoice */
+
+async function generateInvoice(name,phone,aadhaar,dl,bike,price,late,charge,total){
+
+const { jsPDF } = window.jspdf
+
+let invoice="SSBikes-"+invoiceCounter.toString().padStart(4,'0')
+invoiceCounter++
+localStorage.setItem("invoiceCounter",invoiceCounter)
+
+let doc=new jsPDF("p","mm","a4")
+
+doc.setFontSize(18)
+doc.text("SS1 BIKE RENTALS",70,20)
+
+doc.setFontSize(12)
+
+doc.text("Invoice No : "+invoice,20,40)
+
+doc.text("Customer : "+name,20,55)
+doc.text("Phone : "+phone,20,65)
+doc.text("Aadhaar : "+aadhaar,20,75)
+doc.text("Driving Licence : "+dl,20,85)
+
+doc.text("Bike : "+bike,20,100)
+
+doc.text("Base Rent : ₹"+price,20,115)
+doc.text("Late Hours : "+late,20,125)
+doc.text("Late Charge : ₹"+charge,20,135)
+
+doc.setFontSize(14)
+doc.text("Total Amount : ₹"+total,20,155)
+
+/* terms */
+
+doc.setFontSize(11)
+
+doc.text("Terms & Conditions",20,175)
+
+doc.text("1. Customer must carry Driving License.",20,185)
+doc.text("2. Vehicle must be returned in same condition.",20,193)
+doc.text("3. Late charge ₹50 per hour after 24 hours.",20,201)
+doc.text("4. Traffic challans must be paid by customer.",20,209)
+doc.text("5. Damage charges will apply if damage occurs.",20,217)
+doc.text("6. Without intimation do not cross city limits.",20,225)
+doc.text("7. Do not drink and drive.",20,233)
+doc.text("8. Tirumala travel follow TTD 50 minutes rule.",20,241)
+
+/* signatures */
+
+doc.line(20,265,80,265)
+doc.text("Customer Signature",20,273)
+
+doc.line(130,265,190,265)
+doc.text("SS1 Bike Rentals",135,273)
+
+doc.save(invoice+".pdf")
+
+let msg=
+"SS1 BIKE RENTALS\n"+
+"Invoice:"+invoice+"\n"+
+"Bike:"+bike+"\n"+
+"Total:₹"+total
+
+window.open("https://wa.me/91"+phone+"?text="+encodeURIComponent(msg))
+
+}
+
+/* history */
+
+function checkHistory(){
+let p=bkPhone.value
+historyBox.innerHTML=""
+history.forEach(h=>{
+if(h.phone===p){
+historyBox.innerHTML+="Previous: "+h.bike+" "+h.date+"<br>"
+}
+})
+}
+
+/* blacklist */
+
+function checkBlacklist(){
+let a=bkAadhaar.value
+blacklist.forEach(b=>{
+if(b.aadhaar===a){
+blacklistAlert.innerHTML="<div class='alert'>BLACKLIST CUSTOMER</div>"
+}
+})
+}
+
+/* profile */
+
+function openProfile(){
+profileModal.style.display="block"
+}
+
+function closeProfile(){
+profileModal.style.display="none"
+}
+
+</script>
+
 </body>
 </html>
